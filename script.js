@@ -1,32 +1,28 @@
+let currentLanguage = 'en';
+
 document.addEventListener('DOMContentLoaded', function() {
-    // Check for saved language preference
+    // Load saved language or default to English
     const savedLanguage = localStorage.getItem('preferredLanguage') || 'en';
     changeLanguage(savedLanguage);
     
-    // Set up event listeners for language buttons
+    // Set up language buttons
     document.getElementById('en-btn').addEventListener('click', () => changeLanguage('en'));
     document.getElementById('fr-btn').addEventListener('click', () => changeLanguage('fr'));
     document.getElementById('es-btn').addEventListener('click', () => changeLanguage('es'));
 });
 
 function changeLanguage(language) {
-    // Update active button styling
-    document.querySelectorAll('.language-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
+    // Update active button
+    document.querySelectorAll('.language-btn').forEach(btn => btn.classList.remove('active'));
     document.getElementById(`${language}-btn`).classList.add('active');
     
-    // Update all translatable elements
-    const elements = translations[language];
-    for (const [key, value] of Object.entries(elements)) {
+    // Update UI text (questions only)
+    const langData = translations[language];
+    for (const [key, value] of Object.entries(langData)) {
         const element = document.getElementById(key);
-        if (element) {
-            element.textContent = value;
-        } else {
-            console.warn(`Element with ID ${key} not found`);
-        }
+        if (element) element.textContent = value;
     }
     
-    // Save preference
+    currentLanguage = language;
     localStorage.setItem('preferredLanguage', language);
 }
